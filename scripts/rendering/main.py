@@ -57,8 +57,9 @@ def zipdir(path: str, ziph: zipfile.ZipFile) -> None:
             arcname = os.path.join(os.path.basename(root), file)
             ziph.write(os.path.join(root, file), arcname=arcname)
 
+from objaverse.renderutils.blendercalls import render as handle_found_object
 
-def handle_found_object(
+def _handle_found_object(
     local_path: str,
     file_identifier: str,
     sha256: str,
@@ -98,6 +99,7 @@ def handle_found_object(
 
     Returns: True if the object was rendered successfully, False otherwise.
     """
+
     save_uid = get_uid_from_str(file_identifier)
     args = f"--object_path '{local_path}' --num_renders {num_renders}"
 
@@ -346,7 +348,7 @@ def render_objects(
     save_repo_format: Optional[Literal["zip", "tar", "tar.gz", "files"]] = None,
     only_northern_hemisphere: bool = False,
     render_timeout: int = 300,
-    gpu_devices: Optional[Union[int, List[int]]] = None,
+    gpu_devices: Optional[Union[int, List[int]]] = 0,
 ) -> None:
     """Renders objects in the Objaverse-XL dataset with Blender
 
